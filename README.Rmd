@@ -1,0 +1,82 @@
+---
+title: "Análises do Sivep-Gripe"
+author: "Ana Carolina Moreno"
+date: "27/04/2021"
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Análises: Covid-19 no Estado de São Paulo
+### Dados atualizados até **19/04/2021**
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Essa página contém análises de dados de casos confirmados de Covid-19 no Estado de São Paulo.
+
+
+```{r cars}
+summary(cars)
+```
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/master/examples>.
+
+You can also embed plots, for example:
+
+```{r pressure, echo= FALSE}
+
+plot(pressure)
+
+```
+
+Teste da Carol
+
+```{r ggplot_covid_sp_dia, echo=F}
+
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(readr)
+library(ggplot2)
+library(tidylog)
+library(ggthemes)
+library(lme4)
+
+ggplot_covid_sp_dia <- read_rds("data/covid_sp_dia.rds") %>%
+  ggplot(aes(x=data, y=valor, group=categoria, colour=categoria)) +
+  geom_line()+
+  labs(y = 'Total de internações por dia',
+       x = 'Fonte: Censo Covid/SES-SP')+
+  ggtitle("Novas internações e novas mortes confirmadas por Covid-19 (Estado de SP)")+
+  theme(
+    plot.background = element_rect(fill = "white"),
+    panel.background = element_rect(fill = "white", colour="grey"),
+    panel.grid.major = element_line(colour = "grey", linetype = "dotted"),
+    panel.grid.minor = element_line(colour = "grey", linetype = "dotted"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+  )+
+  geom_vline(xintercept=ymd("2021-03-24"), color="blue", size=0.2)
+```
+
+Teste 2
+
+```{r ggplot_covid_sp_dia}
+
+
+plot(ggplot_covid_sp_dia)
+```
+
+
+
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub.
