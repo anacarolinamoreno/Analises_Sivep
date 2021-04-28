@@ -1,7 +1,7 @@
 ---
 title: "Análises do Sivep-Gripe"
-author: "Ana Carolina Moreno"
-date: "27/04/2021"
+author: "(Por Ana Carolina Moreno)"
+date: "Relatório gerado em 27/04/2021 com dados atualizados até 19/04"
 output: github_document
 ---
 
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-### Dados atualizados até **19/04/2021**
+###### Fonte: Sivep-Gripe (Ministério da Saúde): [link para o OpenDatasus](opendatasus.saude.gov.br/)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -51,7 +51,7 @@ ggplot_covid_sp_dia <- read_rds("data/covid_sp_dia.rds") %>%
   geom_vline(xintercept=ymd("2021-03-24"), color="blue", size=0.2)
 ```
 
-## 1- **Total** de internações e mortes por dia
+#### 1- **TOTAL** de internações e mortes por dia
 
 * Linha vermelha: internações
 * Linha verde: mortes
@@ -67,7 +67,7 @@ ggplot_covid_sp_dia <- read_rds("data/covid_sp_dia.rds") %>%
 plot(ggplot_covid_sp_dia)
 ```
 
-* 2- ***Média móvel*** de internações e mortes por dia
+#### 2- **MÉDIA MÓVEL** de internações e mortes por dia
 
 ```{r ggplot_covid_sp_dia_media1, echo=F, message=F, warning=F}
 
@@ -97,10 +97,63 @@ ggplot_covid_sp_dia_media <- read_rds("data/covid_sp_dia_media.rds") %>%
 
 (A linha azul indica a partir de quando os dados caem devido ao atraso de notificação)
 
-```{r ggplot_covid_sp_dia_media2}
+```{r ggplot_covid_sp_dia_media2, message=F, warning=F}
 
 
 plot(ggplot_covid_sp_dia_media)
 ```
 
+#### 3- **TOTAL** de internações por Covid por semana epidemiológica
 
+```{r ggplot_covid_sp_semana1, echo=F, message=F, warning=F}
+
+ggplot_covid_sp_semana <- read_rds("data/covid_sp_semana.rds") %>%
+  ggplot(aes(x=semana, y=internacoes)) +
+  geom_line()+
+  labs(y = 'Total de internações por semana',
+       x = 'Fonte: Censo Covid/SES-SP')+
+  ggtitle("Internações confirmadas por Covid-19 (Estado de SP)")+
+  geom_vline(xintercept=ymd("2021-03-24"), color="blue", size=0.2)
+
+````
+
+* Após meados de janeiro, houve uma queda nas novas internações por semana, mas a partir de meados de fevereiro ela começou a subir numa curva muito íngreme e quase triplicou até o fim de março
+
+(A linha azul indica a partir de quando os dados caem devido ao atraso de notificação)
+
+```{r ggplot_covid_sp_semana2, message=F, warning=F}
+
+
+plot(ggplot_covid_sp_semana)
+```
+
+
+#### 4- **TOTAL** de internações por Covid por mês
+
+```{r ggplot_covid_sp_mes1, echo=F, message=F, warning=F}
+
+ggplot_covid_sp_mes <- read_rds("data/covid_sp_mes.rds") %>%
+  ggplot(aes(x=mes, y=internacoes, colour="blue")) +
+  geom_bar(stat = "identity")+
+  geom_text(aes(x = mes,
+                y = internacoes,
+                vjust = -0.1,
+                size = 5,
+                label = internacoes,
+                colour = "red"))+
+  labs(y = 'Total de internações por mês',
+       x = 'Fonte: Censo Covid/SES-SP')+
+  ggtitle("Internações confirmadas por Covid-19 (Estado de SP)")
+
+````
+
+* O mês de março registrou quase 57 mil internações por Covid-19 no Estado de São Paulo.
+* Isso representa quase o dobro das internações em qualquer outro mês da pandemia.
+
+(O total de abril ainda é preliminar e está sujeito a grande alterações)
+
+```{r ggplot_covid_sp_mes2, message=F, warning=F}
+
+
+plot(ggplot_covid_sp_mes)
+```
