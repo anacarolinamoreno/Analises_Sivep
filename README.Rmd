@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Análises: Covid-19 no Estado de São Paulo
+
 ### Dados atualizados até **19/04/2021**
 
 <!-- badges: start -->
@@ -22,24 +22,7 @@ knitr::opts_chunk$set(
 
 Essa página contém análises de dados de casos confirmados de Covid-19 no Estado de São Paulo.
 
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/master/examples>.
-
-You can also embed plots, for example:
-
-```{r pressure, echo= FALSE}
-
-plot(pressure)
-
-```
-
-Teste da Carol
-
-```{r ggplot_covid_sp_dia, echo=F}
+```{r ggplot_covid_sp_dia1, echo=F, message=F, warning=F}
 
 library(tidyverse)
 library(lubridate)
@@ -68,15 +51,56 @@ ggplot_covid_sp_dia <- read_rds("data/covid_sp_dia.rds") %>%
   geom_vline(xintercept=ymd("2021-03-24"), color="blue", size=0.2)
 ```
 
-Teste 2
+## 1- **Total** de internações e mortes por dia
 
-```{r ggplot_covid_sp_dia}
+* Linha vermelha: internações
+* Linha verde: mortes
+* Entre meados de março e o início de abril o Estado de SP registrou pelo menos 1.500 novos pacientes internados por dia
+* Já as mortes ficaram pelo menos acima de 500 por dia no período
+* O gráfico dá indícios de que existe uma relação entre o aumento da pressão no sistema hospitalar provocou também um aumento do risco de morrer pela doença
+
+(A linha azul indica a partir de quando os dados caem devido ao atraso de notificação)
+
+```{r ggplot_covid_sp_dia2}
 
 
 plot(ggplot_covid_sp_dia)
 ```
 
+* 2- ***Média móvel*** de internações e mortes por dia
+
+```{r ggplot_covid_sp_dia_media1, echo=F, message=F, warning=F}
+
+ggplot_covid_sp_dia_media <- read_rds("data/covid_sp_dia_media.rds") %>%
+  ggplot(aes(x=data, y=valor, group=categoria, colour=categoria)) +
+  geom_line()+
+  labs(y = 'Média móvel de internações e mortes por dia',
+       x = 'Fonte: Censo Covid/SES-SP')+
+  ggtitle("Novas internações e novas mortes confirmadas por Covid-19 (Estado de SP)")+
+  theme(
+    plot.background = element_rect(fill = "white"),
+    panel.background = element_rect(fill = "white", colour="grey"),
+    panel.grid.major = element_line(colour = "grey", linetype = "dotted"),
+    panel.grid.minor = element_line(colour = "grey", linetype = "dotted"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+  )+
+  geom_vline(xintercept=ymd("2021-03-24"), color="blue", size=0.2)
+
+````
 
 
+* Linha vermelha: internações
+* Linha verde: mortes
+* O gráfico é o mesmo acima, mas está mais suavizado porque representa a média móvel de 7 dias
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub.
+(A linha azul indica a partir de quando os dados caem devido ao atraso de notificação)
+
+```{r ggplot_covid_sp_dia_media2}
+
+
+plot(ggplot_covid_sp_dia_media)
+```
+
+
