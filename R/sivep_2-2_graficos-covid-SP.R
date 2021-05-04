@@ -1,30 +1,4 @@
----
-title: "Análises do Sivep-Gripe"
-author: "(Por Ana Carolina Moreno)"
-date: "Relatório gerado em 27/04/2021 com dados atualizados até 19/04"
-output: github_document
----
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-
-
-```
-
-
-###### Fonte: Sivep-Gripe (Ministério da Saúde): [link para o OpenDatasus](opendatasus.saude.gov.br/)
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-Essa página contém análises de dados de casos confirmados de Covid-19 no Estado de São Paulo.
-
-```{r ggplot_covid_sp_dia1, echo=F, message=F, warning=F}
 
 library(tidyverse)
 library(lubridate)
@@ -34,13 +8,20 @@ library(ggplot2)
 library(tidylog)
 library(ggthemes)
 library(lme4)
+library(plotly)
+library(hrbrthemes)
+library(svglite)
 
-trace(grDevices::png, quote({
-  if (missing(type) && missing(antialias)) {
-    type <- "cairo-png"
-    antialias <- "subpixel"
-  }
-}), print = FALSE)
+
+# IMPORTANTE: As análises abaixo dependem do código no script sivep_1_preparar_base.R e dos arquivos RDS gerados pelo script sivep_2-1_analises-covid-SP.R
+
+# ÍNDICE DE GRÁFICOS: CASOS DE COVID-19 CONFIRMADA NO ESTADO DE SÃO PAULO (ESP)
+# 1.1- Total de internações e mortes por Covid por dia no ESP
+# 1.2- Média móvel de internações e mortes por Covid por dia no ESP
+# 1.3 - Total de óbitos por Covid por mês para cada faixa etária no ESP
+
+
+# 1.1- Total de internações e mortes por Covid por dia no ESP
 
 ggplot_covid_sp_dia <- read_rds("data/analises_semanais_sp/covid_sp_dia.rds") %>%
   ggplot(aes(x=data, y=valor, group=categoria, colour=categoria))+
@@ -51,11 +32,11 @@ ggplot_covid_sp_dia <- read_rds("data/analises_semanais_sp/covid_sp_dia.rds") %>
     caption = "Fonte: Sivep-Gripe (Ministério da Saúde)",
     y = "total por dia",
     x = "data"
-    )+
+  )+
   scale_color_manual(
     values=c("#3D748F", "#a80000"),
     labels = c("Novas internações", "Novas mortes")
-    )+
+  )+
   theme(
     plot.background = element_rect(fill = "white"),
     panel.background = element_rect(fill = "white", colour="grey"),
@@ -67,7 +48,7 @@ ggplot_covid_sp_dia <- read_rds("data/analises_semanais_sp/covid_sp_dia.rds") %>
     plot.caption = element_text(face = "italic"),
     legend.position="top",
     legend.title = element_blank()
-    )+
+  )+
   # Destaques para mostrar a data e o valor do pico de INTERNAÇÕES
   annotate(
     geom="text",
@@ -133,27 +114,10 @@ ggplot_covid_sp_dia <- read_rds("data/analises_semanais_sp/covid_sp_dia.rds") %>
     fontface = "bold"
   )
 
-```
 
-#### 1- **TOTAL** de internações e mortes por dia
+ggplot_covid_sp_dia
 
-* Linha vermelha: internações
-* Linha verde: mortes
-* Entre meados de março e o início de abril o Estado de SP registrou pelo menos 1.500 novos pacientes internados por dia
-* Já as mortes ficaram pelo menos acima de 500 por dia no período
-* O gráfico dá indícios de que existe uma relação entre o aumento da pressão no sistema hospitalar provocou também um aumento do risco de morrer pela doença
-
-(A linha azul indica a partir de quando os dados caem devido ao atraso de notificação)
-
-```{r ggplot_covid_sp_dia2}
-
-
-plot(ggplot_covid_sp_dia)
-```
-
-#### 2- **MÉDIA MÓVEL** de internações e mortes por dia
-
-```{r ggplot_covid_sp_dia_media1, echo=F, message=F, warning=F}
+# 1.2- Média móvel de internações e mortes por Covid por dia no ESP
 
 ggplot_covid_sp_dia_media <- read_rds("data/analises_semanais_sp/covid_sp_dia_media.rds") %>%
   ggplot(aes(x=data, y=valor, group=categoria, colour=categoria)) +
@@ -248,29 +212,16 @@ ggplot_covid_sp_dia_media <- read_rds("data/analises_semanais_sp/covid_sp_dia_me
     size = 3.5,
     angle = -90,
     fontface = "bold"
-    )+
+  )+
   # salvando uma versão do gráfico em formato .SVG para ser facilmente replicado no Illustrator
   ggsave('docs/grafico_covid_sp_dia_mediamovel.svg', dpi = 'retina',
          height = 8, width = 12, limitsize = F)
 
-```
+
+ggplot_covid_sp_dia_media
 
 
-* Linha vermelha: internações
-* Linha verde: mortes
-* O gráfico é o mesmo acima, mas está mais suavizado porque representa a média móvel de 7 dias
-
-(A linha azul indica a partir de quando os dados caem devido ao atraso de notificação)
-
-```{r ggplot_covid_sp_dia_media2, message=F, warning=F}
-
-
-plot(ggplot_covid_sp_dia_media)
-```
-
-#### 3- *MORTES* por Covid por *MÊS* e por *FAIXA ETÁRIA*
-
-```{r ggplot_covid_sp_idade1, echo=F, message=F, warning=F}
+# 1.3 - Total de óbitos por Covid por mês para cada faixa etária no ESP
 
 ggplot_obitos_covid_sp_idade_20 <- read_rds("data/analises_semanais_sp/obitos_covid_sp_idade_20.rds") %>%
   filter(mes != "abr 2021") %>%
@@ -311,17 +262,6 @@ ggplot_obitos_covid_sp_idade_20 <- read_rds("data/analises_semanais_sp/obitos_co
                                      size=0.5, linetype="solid")
   )
 
-```
-
-* Março de 2021 foi o mês com a maior ocorrência de mortes por Covid-19 em todas as faixas etárias. 
-* No entanto, esse aumento se comportou de formas diferentes de acordo com a idade dos pacientes. 
-* A faixa etária mais afetada segue sendo a das pessoas com entre 60 a 79 anos: entre fevereiro e março, as mortes subiram de 3.242 para 8.888.
-* Mas o aumento desproporcional de mortes entre os adultos não idosos, com entre 40 e 59 anos, chamou a atenção. Foram 4.626 mortes em março, contra 1.329 em fevereiro. 
-* Com isso, essa faixa etária superou o grupo de pessoas com 80 anos ou mais, que também registrou aumento, mas em um ritmo menor: em março, foram 3.179 mortes, contra 1.628 mortes de fevereiro.
-
-```{r ggplot_covid_sp_idade2, message=F, warning=F}
 
 
-plot(ggplot_obitos_covid_sp_idade_20)
-```
-
+ggplot_obitos_covid_sp_idade_20

@@ -13,6 +13,8 @@ Relatório gerado em 27/04/2021 com dados atualizados até 19/04
 Essa página contém análises de dados de casos confirmados de Covid-19 no
 Estado de São Paulo.
 
+    #> [1] "png"
+
 #### 1- **TOTAL** de internações e mortes por dia
 
 -   Linha vermelha: internações
@@ -51,34 +53,25 @@ plot(ggplot_covid_sp_dia_media)
 
 ![](README_files/figure-gfm/ggplot_covid_sp_dia_media2-1.png)<!-- -->
 
-#### 3- **TOTAL** de internações por Covid por semana epidemiológica
+#### 3- *MORTES* por Covid por *MÊS* e por *FAIXA ETÁRIA*
 
--   Após meados de janeiro, houve uma queda nas novas internações por
-    semana, mas a partir de meados de fevereiro ela começou a subir numa
-    curva muito íngreme e quase triplicou até o fim de março
-
-(A linha azul indica a partir de quando os dados caem devido ao atraso
-de notificação)
-
-``` r
-
-plot(ggplot_covid_sp_semana)
-```
-
-![](README_files/figure-gfm/ggplot_covid_sp_semana2-1.png)<!-- -->
-
-#### 4- **TOTAL** de internações por Covid por mês
-
--   O mês de março registrou quase 57 mil internações por Covid-19 no
-    Estado de São Paulo.
--   Isso representa quase o dobro das internações em qualquer outro mês
-    da pandemia.
-
-(O total de abril ainda é preliminar e está sujeito a grande alterações)
+-   Março de 2021 foi o mês com a maior ocorrência de mortes por
+    Covid-19 em todas as faixas etárias.
+-   No entanto, esse aumento se comportou de formas diferentes de acordo
+    com a idade dos pacientes.
+-   A faixa etária mais afetada segue sendo a das pessoas com entre 60 a
+    79 anos: entre fevereiro e março, as mortes subiram de 3.242 para
+    8.888.
+-   Mas o aumento desproporcional de mortes entre os adultos não idosos,
+    com entre 40 e 59 anos, chamou a atenção. Foram 4.626 mortes em
+    março, contra 1.329 em fevereiro.
+-   Com isso, essa faixa etária superou o grupo de pessoas com 80 anos
+    ou mais, que também registrou aumento, mas em um ritmo menor: em
+    março, foram 3.179 mortes, contra 1.628 mortes de fevereiro.
 
 ``` r
 
-plot(ggplot_covid_sp_mes)
+plot(ggplot_obitos_covid_sp_idade_20)
 ```
 
-![](README_files/figure-gfm/ggplot_covid_sp_mes2-1.png)<!-- -->
+![](README_files/figure-gfm/ggplot_covid_sp_idade2-1.png)<!-- -->

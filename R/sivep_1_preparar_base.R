@@ -1,5 +1,7 @@
 rm(list = ls())
 
+rm(list = grep("^sivep", ls(), value = TRUE, invert = TRUE))
+
 library(tidyverse)
 library(lubridate)
 library(zoo)
@@ -22,11 +24,11 @@ end.of.epiweek <- function(x, end = 6) {
 
 # Carregar as bases com as colunas pré-selecionadas
 
-sivep2020 <- read.csv2('data-raw/INFLUD-19-04-2021.csv', encoding="Windows-1252") %>%
+sivep2020 <- read.csv2('C:/Users/cmoreno/Documents/TV/Códigos/Sivep/data-raw/INFLUD-19-04-2021.csv', encoding="Windows-1252") %>%
   select(DT_NOTIFIC, DT_SIN_PRI, SEM_PRI, SG_UF_NOT, CO_MUN_NOT, ID_MUNICIP, CS_SEXO, NU_IDADE_N, SG_UF, CO_MUN_RES, ID_MN_RESI, ID_UNIDADE, HOSPITAL, DT_INTERNA, SG_UF_INTE
          , CO_MU_INTE, ID_MN_INTE, UTI, DT_ENTUTI, DT_SAIDUTI, SUPORT_VEN, PCR_SARS2, CLASSI_FIN, CRITERIO, EVOLUCAO, DT_EVOLUCA, DT_ENCERRA, CS_GESTANT, PUERPERA)
 
-sivep2021 <- read.csv2('data-raw/INFLUD21-19-04-2021.csv', encoding="Windows-1252") %>%
+sivep2021 <- read.csv2('C:/Users/cmoreno/Documents/TV/Códigos/Sivep/data-raw/INFLUD21-19-04-2021.csv', encoding="Windows-1252") %>%
   select(DT_NOTIFIC, DT_SIN_PRI, SEM_PRI, SG_UF_NOT, CO_MUN_NOT, ID_MUNICIP, CS_SEXO, NU_IDADE_N, SG_UF, CO_MUN_RES, ID_MN_RESI, ID_UNIDADE, HOSPITAL, DT_INTERNA, SG_UF_INTE
          , CO_MU_INTE, ID_MN_INTE, UTI, DT_ENTUTI, DT_SAIDUTI, SUPORT_VEN, PCR_SARS2, CLASSI_FIN, CRITERIO, EVOLUCAO, DT_EVOLUCA, DT_ENCERRA, CS_GESTANT, PUERPERA)
 
@@ -49,21 +51,28 @@ sivep <- bind_rows(
     sem_saida_uti = end.of.epiweek(DT_SAIDUTI),
     DT_EVOLUCA = lubridate::dmy(DT_EVOLUCA),
     sem_evolucao = end.of.epiweek(DT_EVOLUCA),
+    faixa_etaria_20 = case_when(
+      NU_IDADE_N < 20 ~ "0 a 19 anos",
+      NU_IDADE_N > 19 & NU_IDADE_N < 40 ~ "20 a 39 anos",
+      NU_IDADE_N > 39 & NU_IDADE_N < 60 ~ "40 a 59 anos",
+      NU_IDADE_N > 59 & NU_IDADE_N < 80 ~ "60 a 79 anos",
+      NU_IDADE_N > 79 ~ "80 anos ou mais",
+      T ~ "Idade não informada"),
     faixa_etaria = case_when(
-    NU_IDADE_N < 1 ~ "0 a menos de 01 ano",
-    NU_IDADE_N > 0 & NU_IDADE_N < 5 ~ "01 a 04 anos",
-    NU_IDADE_N > 4 & NU_IDADE_N < 10 ~ "05 a 09 anos",
-    NU_IDADE_N > 9 & NU_IDADE_N < 15 ~ "10 a 14 anos",
-    NU_IDADE_N > 14 & NU_IDADE_N < 20 ~ "15 a 19 anos",
-    NU_IDADE_N > 19 & NU_IDADE_N < 30 ~ "20 a 29 anos",
-    NU_IDADE_N > 29 & NU_IDADE_N < 40 ~ "30 a 39 anos",
-    NU_IDADE_N > 39 & NU_IDADE_N < 50 ~ "40 a 49 anos",
-    NU_IDADE_N > 49 & NU_IDADE_N < 60 ~ "50 a 59 anos",
-    NU_IDADE_N > 59 & NU_IDADE_N < 70 ~ "60 a 69 anos",
-    NU_IDADE_N > 69 & NU_IDADE_N < 80 ~ "70 a 79 anos",
-    NU_IDADE_N > 79 & NU_IDADE_N < 90 ~ "80 a 89 anos",
-    NU_IDADE_N > 89 ~ "90 anos ou mais",
-    T ~ "Idade não informada"),
+      NU_IDADE_N < 1 ~ "0 a menos de 01 ano",
+      NU_IDADE_N > 0 & NU_IDADE_N < 5 ~ "01 a 04 anos",
+      NU_IDADE_N > 4 & NU_IDADE_N < 10 ~ "05 a 09 anos",
+      NU_IDADE_N > 9 & NU_IDADE_N < 15 ~ "10 a 14 anos",
+      NU_IDADE_N > 14 & NU_IDADE_N < 20 ~ "15 a 19 anos",
+      NU_IDADE_N > 19 & NU_IDADE_N < 30 ~ "20 a 29 anos",
+      NU_IDADE_N > 29 & NU_IDADE_N < 40 ~ "30 a 39 anos",
+      NU_IDADE_N > 39 & NU_IDADE_N < 50 ~ "40 a 49 anos",
+      NU_IDADE_N > 49 & NU_IDADE_N < 60 ~ "50 a 59 anos",
+      NU_IDADE_N > 59 & NU_IDADE_N < 70 ~ "60 a 69 anos",
+      NU_IDADE_N > 69 & NU_IDADE_N < 80 ~ "70 a 79 anos",
+      NU_IDADE_N > 79 & NU_IDADE_N < 90 ~ "80 a 89 anos",
+      NU_IDADE_N > 89 ~ "90 anos ou mais",
+      T ~ "Idade não informada"),
     faixa_etaria_10 = case_when(
       NU_IDADE_N < 10 ~ "0 a 9 anos",
       NU_IDADE_N > 10 & NU_IDADE_N < 20 ~ "10 a 19 anos",
@@ -131,6 +140,7 @@ sivep <- bind_rows(
       mes == 1 & ano == 2021 ~ "01/2021",
       mes == 2 & ano == 2021 ~ "02/2021",
       mes == 3 & ano == 2021 ~ "03/2021",
+      mes == 4 & ano == 2021 ~ "04/2021",
       T  ~ "Data não informada/erro de digitação"
     ),
     mes_ano_internacao2 = sf(ymd(DT_INTERNA)),
@@ -174,6 +184,7 @@ sivep <- bind_rows(
       mes_obito == 1 & ano_obito == 2021 ~ "01/2021",
       mes_obito == 2 & ano_obito == 2021 ~ "02/2021",
       mes_obito == 3 & ano_obito == 2021 ~ "03/2021",
+      mes_obito == 4 & ano_obito == 2021 ~ "04/2021",
       T | is.na(DT_EVOLUCA) ~ "Data não informada/erro de digitação"
     ),
     contagem = case_when(
@@ -195,8 +206,12 @@ sivep <- bind_rows(
       EVOLUCAO == 9 | is.na(EVOLUCAO) ~ "Sem desfecho ainda"
     ))
 
+# Filtras só os casos de residentes do Estado de São Paulo
 
-glimpse(sivep)
+sivep_sp <- sivep %>%
+  filter(SG_UF == "SP")
+
+
 
 
 # ANÁLISES A PARTIR DA SIVEP JÁ CONCATENADA
