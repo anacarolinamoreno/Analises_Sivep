@@ -1,7 +1,7 @@
 ---
-title: "Análises do Sivep-Gripe"
+title: "Análises do Sivep-Gripe (até 19/04/2021)"
 author: "(Por Ana Carolina Moreno)"
-date: "Relatório gerado em 27/04/2021 com dados atualizados até 19/04"
+date: "Relatório gerado em 04/05/2021 com dados atualizados até 19/04"
 output: github_document
 ---
 
@@ -135,7 +135,7 @@ ggplot_covid_sp_dia <- read_rds("data/analises_semanais_sp/covid_sp_dia.rds") %>
 
 ```
 
-#### 1- **TOTAL** de internações e mortes por dia
+#### 1- TOTAL de internações e mortes por dia
 
 * Linha vermelha: internações
 * Linha verde: mortes
@@ -151,7 +151,7 @@ ggplot_covid_sp_dia <- read_rds("data/analises_semanais_sp/covid_sp_dia.rds") %>
 plot(ggplot_covid_sp_dia)
 ```
 
-#### 2- **MÉDIA MÓVEL** de internações e mortes por dia
+#### 2- MÉDIA MÓVEL de internações e mortes por dia
 
 ```{r ggplot_covid_sp_dia_media1, echo=F, message=F, warning=F}
 
@@ -268,7 +268,7 @@ ggplot_covid_sp_dia_media <- read_rds("data/analises_semanais_sp/covid_sp_dia_me
 plot(ggplot_covid_sp_dia_media)
 ```
 
-#### 3- *MORTES* por Covid por *MÊS* e por *FAIXA ETÁRIA*
+#### 3- MORTES por Covid por MÊS e por FAIXA ETÁRIA
 
 ```{r ggplot_covid_sp_idade1, echo=F, message=F, warning=F}
 

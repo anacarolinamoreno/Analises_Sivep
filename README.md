@@ -1,7 +1,7 @@
-Análises do Sivep-Gripe
+Análises do Sivep-Gripe (até 19/04/2021)
 ================
 (Por Ana Carolina Moreno)
-Relatório gerado em 27/04/2021 com dados atualizados até 19/04
+Relatório gerado em 04/05/2021 com dados atualizados até 19/04
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -15,7 +15,7 @@ Estado de São Paulo.
 
     #> [1] "png"
 
-#### 1- **TOTAL** de internações e mortes por dia
+#### 1- TOTAL de internações e mortes por dia
 
 -   Linha vermelha: internações
 -   Linha verde: mortes
@@ -36,7 +36,7 @@ plot(ggplot_covid_sp_dia)
 
 ![](README_files/figure-gfm/ggplot_covid_sp_dia2-1.png)<!-- -->
 
-#### 2- **MÉDIA MÓVEL** de internações e mortes por dia
+#### 2- MÉDIA MÓVEL de internações e mortes por dia
 
 -   Linha vermelha: internações
 -   Linha verde: mortes
@@ -53,7 +53,7 @@ plot(ggplot_covid_sp_dia_media)
 
 ![](README_files/figure-gfm/ggplot_covid_sp_dia_media2-1.png)<!-- -->
 
-#### 3- *MORTES* por Covid por *MÊS* e por *FAIXA ETÁRIA*
+#### 3- MORTES por Covid por MÊS e por FAIXA ETÁRIA
 
 -   Março de 2021 foi o mês com a maior ocorrência de mortes por
     Covid-19 em todas as faixas etárias.
